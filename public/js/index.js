@@ -1,8 +1,9 @@
 import { displayMap } from './mapbox';
-import { login, logout } from './login';
+import { login, logout, signup } from './login';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './razorpay';
 
+const signupForm = document.querySelector('.form--signup');
 const loginForm = document.querySelector('.form--login');
 const mapBox = document.getElementById('map');
 const logoutBtn = document.querySelector('.nav__el--logout');
@@ -13,6 +14,25 @@ const bookBtn = document.getElementById('book-tour');
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations);
   displayMap(locations);
+}
+
+if (signupForm) {
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = signupForm.querySelector('.btn');
+    btn.textContent = 'Creating account...';
+    btn.disabled = true;
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+
+    await signup(name, email, password, passwordConfirm);
+
+    btn.textContent = 'Sign up';
+    btn.disabled = false;
+  });
 }
 
 if (loginForm) {
